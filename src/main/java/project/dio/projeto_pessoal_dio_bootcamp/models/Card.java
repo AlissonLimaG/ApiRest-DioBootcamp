@@ -24,7 +24,7 @@ public class Card {
     @Column
     private String number;
 
-    @Column(name = "limit_value",scale=13, precision = 2)
+    @Column(name = "limit_value",precision = 13, scale = 2)
     private BigDecimal limit;
 
 }
