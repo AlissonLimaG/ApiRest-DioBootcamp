@@ -24,6 +24,7 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -35,7 +36,11 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
-
+tasks.jar{
+	manifest{
+		attributes['Main-Class'] = 'java.project.dio.projeto_pessoal_dio_bootcamp.ProjetoPessoalDioBootcampApplication'
+	}
+}
 tasks.named('test') {
 	useJUnitPlatform()
 }
