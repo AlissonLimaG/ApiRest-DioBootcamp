@@ -38,7 +38,7 @@ dependencies {
 }
 tasks.jar{
 	manifest{
-		attributes['Main-Class'] = 'java.project.dio.projeto_pessoal_dio_bootcamp.ProjetoPessoalDioBootcampApplication'
+		attributes['Main-Class'] = 'project.dio.projeto_pessoal_dio_bootcamp.ProjetoPessoalDioBootcampApplication'
 	}
 }
 tasks.named('test') {
