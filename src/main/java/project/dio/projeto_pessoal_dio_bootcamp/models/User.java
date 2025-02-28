@@ -3,14 +3,7 @@ package project.dio.projeto_pessoal_dio_bootcamp.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,15 +21,17 @@ public class User {
     @Column
     private String name;
 
+    @JoinColumn(name = "id_account")
     @OneToOne(cascade = CascadeType.ALL)
     private Account account;
 
+    @JoinColumn(name = "id_card")
     @OneToOne(cascade = CascadeType.ALL)
     private Card card;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Features> features = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<News> news = new ArrayList<>();
 }

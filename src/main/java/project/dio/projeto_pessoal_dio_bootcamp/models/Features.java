@@ -1,5 +1,6 @@
 package project.dio.projeto_pessoal_dio_bootcamp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,8 +25,9 @@ public class Features {
 
     private String description;
 
+    @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name = "id_user", nullable = false, referencedColumnName = "id")
     private User user;
 
 }
