@@ -37,8 +37,8 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 tasks.jar{
-	manifest{
-		attributes['Main-Class'] = 'project.dio.projeto_pessoal_dio_bootcamp.ProjetoPessoalDioBootcampApplication'
+	manifest {
+		attributes["Main-Class"] = "project.dio.projeto_pessoal_dio_bootcamp.DecolaDesafioBanco"
 	}
 }
 tasks.named('test') {
