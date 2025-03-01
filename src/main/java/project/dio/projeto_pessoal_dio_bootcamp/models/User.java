@@ -23,7 +23,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "VARHCAR(10) DEFAULT 'ROLE_USER'")
+    @Column(columnDefinition = "VARCHAR(10) DEFAULT 'ROLE_USER'")
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
