@@ -18,8 +18,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(length = 50, nullable = false)
     private String name;
+
+    @Column(length = 150, nullable = false)
+    private String username;
+
+    @Column(length = 150, nullable = false)
+    private String password;
 
     @JoinColumn(name = "id_account")
     @OneToOne(cascade = CascadeType.ALL)
