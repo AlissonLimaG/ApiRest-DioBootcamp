@@ -17,8 +17,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import project.dio.projeto_pessoal_dio_bootcamp.infra.security.TokenService;
 import project.dio.projeto_pessoal_dio_bootcamp.models.User;
-import project.dio.projeto_pessoal_dio_bootcamp.models.records.UserLoginRequestRecord;
-import project.dio.projeto_pessoal_dio_bootcamp.models.records.UserLoginResponseRecord;
+import project.dio.projeto_pessoal_dio_bootcamp.controllers.records.UserLoginRequestRecord;
+import project.dio.projeto_pessoal_dio_bootcamp.controllers.records.UserLoginResponseRecord;
 import project.dio.projeto_pessoal_dio_bootcamp.services.UserService;
 
 @RestController
