@@ -1,6 +1,8 @@
 package project.dio.projeto_pessoal_dio_bootcamp.exceptions;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import org.hibernate.exception.DataException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

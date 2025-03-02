@@ -11,23 +11,32 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
+//@Data
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @Entity(name = "tb_features")
-public class Features {
+public class Features extends BaseItem{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String icon;
-
-    private String description;
-
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "id_user", nullable = false, referencedColumnName = "id")
-    private User user;
+    public Features(Long id, String icon, String description){
+        super(id,icon,description);
+    }
+//    public Features(Long id, String icon, String description) {
+//        this.id = id;
+//        this.icon = icon;
+//        this.description = description;
+//    }
+//
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
+//
+//    private String icon;
+//
+//    private String description;
+//
+//    @JsonIgnore
+//    @ManyToOne
+//    @JoinColumn(name = "id_user", nullable = false, referencedColumnName = "id")
+//    private User user;
 
 }

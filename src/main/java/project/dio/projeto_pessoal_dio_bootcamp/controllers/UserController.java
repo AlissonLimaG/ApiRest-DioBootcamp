@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import project.dio.projeto_pessoal_dio_bootcamp.controllers.records.UserRecord;
 import project.dio.projeto_pessoal_dio_bootcamp.infra.security.TokenService;
 import project.dio.projeto_pessoal_dio_bootcamp.models.User;
 import project.dio.projeto_pessoal_dio_bootcamp.controllers.records.UserLoginRequestRecord;
@@ -34,7 +35,8 @@ public class UserController {
     private TokenService tokenService;
 
     @PostMapping
-    public ResponseEntity<User> saveUser(@RequestBody User user){
+    public ResponseEntity<UserRecord> saveUser(@RequestBody UserRecord userRecord){
+        User user = userRecord.toModel();
         String encodedPassword = encoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         User userCreated = userService.saveUser(user);
@@ -43,7 +45,7 @@ public class UserController {
                         .path("/{id}")
                         .buildAndExpand(userCreated.getId())
                         .toUri();
-        return ResponseEntity.created(location).body(userCreated);
+        return ResponseEntity.created(location).body(new UserRecord(userCreated));
     }
 
     @PostMapping("/auth")

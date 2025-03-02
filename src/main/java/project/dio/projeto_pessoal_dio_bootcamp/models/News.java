@@ -11,24 +11,34 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
+//@Data
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @Entity(name = "tb_news")
-public class News {
+public class News extends BaseItem{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    public News(Long id, String icon, String description) {
+        super(id,icon,description);
+    }
 
-    @Column
-    private String icon;
-
-    @Column
-    private String description;
-
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "id_user", nullable = false, referencedColumnName = "id")
-    private User user;
+//    public News(Long id, String icon, String description) {
+//        this.id = id;
+//        this.icon = icon;
+//        this.description = description;
+//    }
+//
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
+//
+//    @Column
+//    private String icon;
+//
+//    @Column
+//    private String description;
+//
+//    @JsonIgnore
+//    @ManyToOne
+//    @JoinColumn(name = "id_user", nullable = false, referencedColumnName = "id")
+//    private User user;
 }
