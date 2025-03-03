@@ -25,91 +25,81 @@ public class GlobalExceptionHandler {
 
     //EXCEÇÕES DE NEGÓCIO
     @ExceptionHandler(exception = UserAlreadyExistsException.class)
-    public ResponseEntity<ErrorMesage> userAlreadyExists(UserAlreadyExistsException e){
+    public ResponseEntity<ErrorMessage> userAlreadyExists(UserAlreadyExistsException e){
         log.info(e.getMessage(),e);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        ErrorMesage message = new ErrorMesage(HttpStatus.CONFLICT.value(), LocalDateTime.now().format(formatter), e.getMessage());
+        ErrorMessage message = new ErrorMessage(HttpStatus.CONFLICT.value(), LocalDateTime.now().format(formatter), e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(message);
     }
 
     @ExceptionHandler(exception = UserNotExistsException.class)
-    public ResponseEntity<ErrorMesage> userNotExists(UserNotExistsException e){
+    public ResponseEntity<ErrorMessage> userNotExists(UserNotExistsException e){
         log.error(e.getMessage(),e);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        ErrorMesage message = new ErrorMesage(HttpStatus.NOT_FOUND.value(), LocalDateTime.now().format(formatter), e.getMessage());
+        ErrorMessage message = new ErrorMessage(HttpStatus.NOT_FOUND.value(), LocalDateTime.now().format(formatter), e.toString());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
     }
 
     @ExceptionHandler(exception = BadCredentialsException.class)
-    public ResponseEntity<ErrorMesage> userNotExists(BadCredentialsException e){
+    public ResponseEntity<ErrorMessage> userNotExists(BadCredentialsException e){
         log.error(e.getMessage(),e);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        ErrorMesage message = new ErrorMesage(HttpStatus.UNAUTHORIZED.value(), LocalDateTime.now().format(formatter), e.getMessage());
+        ErrorMessage message = new ErrorMessage(HttpStatus.UNAUTHORIZED.value(), LocalDateTime.now().format(formatter), e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message);
     }
 
     @ExceptionHandler(exception = MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorMesage> invalidArguments(MethodArgumentNotValidException e){
+    public ResponseEntity<ErrorMessage> invalidArguments(MethodArgumentNotValidException e){
         log.error(e.getMessage(),e);
         List<String> errors = e.getBindingResult().getFieldErrors()
                 .stream()
                 .map(fieldError -> fieldError.getDefaultMessage())
                 .toList();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        ErrorMesage message = new ErrorMesage(HttpStatus.NOT_FOUND.value(), LocalDateTime.now().format(formatter), String.join("; ",errors));
+        ErrorMessage message = new ErrorMessage(HttpStatus.NOT_FOUND.value(), LocalDateTime.now().format(formatter), String.join("; ",errors));
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
     }
 
     @ExceptionHandler(exception = ExceededAccountLimitException.class)
-    public ResponseEntity<ErrorMesage> exceededLimit(ExceededAccountLimitException e){
+    public ResponseEntity<ErrorMessage> exceededLimit(ExceededAccountLimitException e){
         log.error(e.getMessage(),e);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        ErrorMesage message = new ErrorMesage(HttpStatus.UNPROCESSABLE_ENTITY.value(), LocalDateTime.now().format(formatter), e.getMessage());
+        ErrorMessage message = new ErrorMessage(HttpStatus.UNPROCESSABLE_ENTITY.value(), LocalDateTime.now().format(formatter), e.getMessage());
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(message);
     }
 
     @ExceptionHandler(exception = NotBalanceException.class)
-    public ResponseEntity<ErrorMesage> notBalance(NotBalanceException e){
+    public ResponseEntity<ErrorMessage> notBalance(NotBalanceException e){
         log.error(e.getMessage(),e);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        ErrorMesage message = new ErrorMesage(HttpStatus.UNPROCESSABLE_ENTITY.value(), LocalDateTime.now().format(formatter), e.getMessage());
+        ErrorMessage message = new ErrorMessage(HttpStatus.UNPROCESSABLE_ENTITY.value(), LocalDateTime.now().format(formatter), e.getMessage());
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(message);
     }
 
     @ExceptionHandler(exception = RecipientNotExistsException.class)
-    public ResponseEntity<ErrorMesage> recipientNotExists(RecipientNotExistsException e){
+    public ResponseEntity<ErrorMessage> recipientNotExists(RecipientNotExistsException e){
         log.error(e.getMessage(),e);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        ErrorMesage message = new ErrorMesage(HttpStatus.NOT_FOUND.value(), LocalDateTime.now().format(formatter), e.getMessage());
+        ErrorMessage message = new ErrorMessage(HttpStatus.NOT_FOUND.value(), LocalDateTime.now().format(formatter), e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
     }
 
     //EXCEÇÕES DE REQUISIÇÃO
     @ExceptionHandler(exception = MissingAuthHeadingException.class)
-    public ResponseEntity<ErrorMesage> missingAuthHeaderException(MissingAuthHeadingException e){
+    public ResponseEntity<ErrorMessage> missingAuthHeaderException(MissingAuthHeadingException e){
         log.error(e.getMessage(),e);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        ErrorMesage message = new ErrorMesage(HttpStatus.UNAUTHORIZED.value(), LocalDateTime.now().format(formatter), e.getMessage());
+        ErrorMessage message = new ErrorMessage(HttpStatus.UNAUTHORIZED.value(), LocalDateTime.now().format(formatter), e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message);
     }
 
     //GERAL
     @ExceptionHandler(exception = Exception.class)
-    public ResponseEntity<ErrorMesage> unexpectedException(Exception e){
+    public ResponseEntity<ErrorMessage> unexpectedException(Exception e){
         log.error(e.getMessage(),e);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        ErrorMesage message = new ErrorMesage(HttpStatus.NOT_FOUND.value(), LocalDateTime.now().format(formatter), e.getMessage());
+        ErrorMessage message = new ErrorMessage(HttpStatus.NOT_FOUND.value(), LocalDateTime.now().format(formatter), e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
-    }
-
-
-
-    @Getter
-    @AllArgsConstructor
-    public class ErrorMesage{
-        private Integer status;
-        private String time;
-        private String message;
     }
 
 }

@@ -2,6 +2,7 @@ package project.dio.projeto_pessoal_dio_bootcamp.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.antlr.v4.runtime.Token;
@@ -23,6 +24,7 @@ import project.dio.projeto_pessoal_dio_bootcamp.models.User;
 import project.dio.projeto_pessoal_dio_bootcamp.services.AccountService;
 
 @RestController
+@Tag(name = "AccountController", description = "Controller to simulate the dynamics of using a user's bank account, such as: deposit, withdrawals and transfer between accounts.")
 @RequestMapping("/account")
 public class AccountController {
 

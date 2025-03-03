@@ -1,5 +1,9 @@
 package project.dio.projeto_pessoal_dio_bootcamp.controllers.records;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import project.dio.projeto_pessoal_dio_bootcamp.models.Account;
 import project.dio.projeto_pessoal_dio_bootcamp.models.Features;
 import project.dio.projeto_pessoal_dio_bootcamp.models.User;
@@ -10,13 +14,23 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
-public record UserRecord(String name,
-                         String username,
-                         String password,
-                         AccountRecord account,
-                         CardRecord card,
-                         List<FeaturesRecord> features,
-                         List<NewsRecord> news) {
+public record UserRecord(
+        @NotEmpty(message = "Name not be empty")
+        @NotNull(message = "Name not be null")
+        String name,
+        @NotEmpty(message = "Username not be empty")
+        @NotNull(message = "Username not be null")
+        String username,
+        @Size(min = 3, message = "The password must be greater than 3 characters.")
+        @NotEmpty(message = "Password not be empty")
+        @NotNull(message = "Password not be null")
+        String password,
+        @Valid
+        @NotNull(message = "Account not be null")
+        AccountRecord account,
+        CardRecord card,
+        List<FeaturesRecord> features,
+        List<NewsRecord> news) {
 
     public UserRecord(User user){
         this(
