@@ -26,17 +26,20 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(autorize-> autorize
+
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+
                         .requestMatchers(HttpMethod.GET,"/users/{id}").hasAnyRole("USER","ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/users/deposit").hasAnyRole("USER","ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/users/withdrawal").hasAnyRole("USER","ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/users/transfer").hasAnyRole("USER","ADMIN")
                         .requestMatchers(HttpMethod.POST,"/users").permitAll()
                         .requestMatchers(HttpMethod.POST,"/users/login").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/account/deposit").hasAnyRole("USER","ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/account/withdrawal").hasAnyRole("USER","ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/account/transfer").hasAnyRole("USER","ADMIN")
+
                         .anyRequest().permitAll())
-                .headers(headers -> headers
-                        .frameOptions(frame -> frame.sameOrigin()))
+
+                .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
