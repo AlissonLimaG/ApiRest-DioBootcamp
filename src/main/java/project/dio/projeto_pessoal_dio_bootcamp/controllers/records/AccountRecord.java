@@ -4,15 +4,15 @@ import project.dio.projeto_pessoal_dio_bootcamp.models.Account;
 
 import java.math.BigDecimal;
 
-public record AccountRecord(Long id, String number, String agency, BigDecimal balance, BigDecimal limit) {
+public record AccountRecord(String number, String agency, BigDecimal balance, BigDecimal limit) {
 
     public AccountRecord(Account account){
-        this(account.getId(),account.getNumber(),account.getAgency(),account.getBalance(),account.getLimit());
+        this(account.getNumber(),account.getAgency(),account.getBalance(),account.getLimit());
     }
 
     public Account toModel(){
         return new Account(
-                this.id,
+                null,
                 this.number,
                 this.agency,
                 this.balance,

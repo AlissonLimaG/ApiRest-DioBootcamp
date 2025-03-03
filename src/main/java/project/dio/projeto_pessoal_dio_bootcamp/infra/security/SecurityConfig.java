@@ -29,7 +29,11 @@ public class SecurityConfig {
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/users/{id}").hasAnyRole("USER","ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/users/deposit").hasAnyRole("USER","ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/users/withdrawal").hasAnyRole("USER","ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/users/transfer").hasAnyRole("USER","ADMIN")
                         .requestMatchers(HttpMethod.POST,"/users").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/users/login").permitAll()
                         .anyRequest().permitAll())
                 .headers(headers -> headers
                         .frameOptions(frame -> frame.sameOrigin()))

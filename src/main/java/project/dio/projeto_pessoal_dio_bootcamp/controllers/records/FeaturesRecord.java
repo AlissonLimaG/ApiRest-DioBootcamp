@@ -2,15 +2,15 @@ package project.dio.projeto_pessoal_dio_bootcamp.controllers.records;
 
 import project.dio.projeto_pessoal_dio_bootcamp.models.Features;
 
-public record FeaturesRecord(Long id, String icon, String description) {
+public record FeaturesRecord(String icon, String description) {
 
     public FeaturesRecord(Features features){
-        this(features.getId(),features.getIcon(),features.getDescription());
+        this(features.getIcon(),features.getDescription());
     }
 
     public Features toModel(){
         return new Features(
-                this.id,
+                null,
                 this.icon,
                 this.description
         );

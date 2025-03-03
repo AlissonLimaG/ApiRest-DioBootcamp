@@ -4,15 +4,15 @@ import project.dio.projeto_pessoal_dio_bootcamp.models.Card;
 
 import java.math.BigDecimal;
 
-public record CardRecord(Long id, String number, BigDecimal limit) {
+public record CardRecord(String number, BigDecimal limit) {
 
     public CardRecord(Card card){
-        this(card.getId(),card.getNumber(),card.getLimit());
+        this(card.getNumber(),card.getLimit());
     }
 
     public Card toModel(){
         return new Card(
-                this.id,
+                null,
                 this.number,
                 this.limit
         );
