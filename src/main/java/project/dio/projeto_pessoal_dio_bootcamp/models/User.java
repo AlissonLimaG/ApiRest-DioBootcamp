@@ -25,7 +25,7 @@ public class User implements UserDetails {
 
     @Column(columnDefinition = "VARCHAR(10) DEFAULT 'ROLE_USER'")
     @Enumerated(EnumType.STRING)
-    private UserRole role;
+    private UserRole role = UserRole.ROLE_USER;
 
     @Column(length = 50, nullable = false)
     private String name;
