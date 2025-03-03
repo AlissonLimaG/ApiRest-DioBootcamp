@@ -1,5 +1,7 @@
 package project.dio.projeto_pessoal_dio_bootcamp.controllers;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,21 +20,18 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import project.dio.projeto_pessoal_dio_bootcamp.controllers.records.UserRecord;
-import project.dio.projeto_pessoal_dio_bootcamp.controllers.records.requestRecords.DepositRequestRecord;
-import project.dio.projeto_pessoal_dio_bootcamp.controllers.records.requestRecords.WithdrawalRequestRecord;
-import project.dio.projeto_pessoal_dio_bootcamp.controllers.records.requestRecords.TransferRequestRecord;
+import project.dio.projeto_pessoal_dio_bootcamp.controllers.records.requestRecords.*;
 import project.dio.projeto_pessoal_dio_bootcamp.controllers.records.responseRecords.DepositResponseRecord;
 import project.dio.projeto_pessoal_dio_bootcamp.controllers.records.responseRecords.WithdrawalResponseRecord;
 import project.dio.projeto_pessoal_dio_bootcamp.controllers.records.responseRecords.TransferResponseRecord;
 import project.dio.projeto_pessoal_dio_bootcamp.exceptions.requestExceptions.MissingAuthHeadingException;
 import project.dio.projeto_pessoal_dio_bootcamp.infra.security.TokenService;
 import project.dio.projeto_pessoal_dio_bootcamp.models.User;
-import project.dio.projeto_pessoal_dio_bootcamp.controllers.records.requestRecords.UserLoginRequestRecord;
 import project.dio.projeto_pessoal_dio_bootcamp.controllers.records.responseRecords.UserLoginResponseRecord;
 import project.dio.projeto_pessoal_dio_bootcamp.services.UserService;
 
 @RestController
-@Tag(name = "UsersController", description = "Controller to simulate the dynamics of using a user's bank account, such as: registration, login, deposit, withdrawals, etc.")
+@Tag(name = "UsersController", description = "Controller to simulate the dynamics of using a user's bank account, such as: registration, login, updating and deletion of user data")
 @RequestMapping("/users")
 public class UserController {
     @Autowired
@@ -45,14 +44,13 @@ public class UserController {
     private TokenService tokenService;
 
 
-
     @PostMapping
     @Operation(summary = "Register a user", description = "Register a new user and return some of their data.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User created successfully!"),
             @ApiResponse(responseCode = "409", description = "User already exists.")
     })
-    public ResponseEntity<UserRecord> saveUser(@RequestBody UserRecord userRecord){
+    public ResponseEntity<UserRecord> saveUser(@RequestBody @Valid UserRecord userRecord){
         User user = userRecord.toModel();
         String encodedPassword = encoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
@@ -73,7 +71,7 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "Invalid credentials.")
     })
     @PostMapping("/login")
-    public ResponseEntity<UserLoginResponseRecord> login(@RequestBody UserLoginRequestRecord login){
+    public ResponseEntity<UserLoginResponseRecord> login(@RequestBody @Valid UserLoginRequestRecord login){
             try{
                 var usernamePassword = new UsernamePasswordAuthenticationToken(
                         login.username(),
@@ -90,67 +88,53 @@ public class UserController {
 
 
 
-    @Operation(summary = "Get a user by id", description = "Retrieve a specific user based on its ID")
+    @Operation(summary = "Get a current user", description = "Retrieve a current user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operation successful"),
             @ApiResponse(responseCode = "404", description = "User not exists.")
     })
-    @GetMapping("/{id}")
-    public ResponseEntity<User> findById(@PathVariable Long id){
-        return ResponseEntity.ok().body(userService.findById(id));
+    @GetMapping()
+    public ResponseEntity<UserRecord> findUser(HttpServletRequest request){
+        String username = this.validationRequest(request);
+        User user = (User) userService.loadUserByUsername(username);
+        user.setPassword("");
+        UserRecord userResponse = new UserRecord(user);
+
+        return ResponseEntity.ok().body(userResponse);
     }
 
 
 
-    @Operation(summary = "Deposit money into the account", description = "Deposits an amount into a specific user's account and returns informations of deposit and the account")
+    @Operation(summary = "Update a current user", description = "Update a current user and return new data")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operation successful"),
-            @ApiResponse(responseCode = "403", description = "Missing authorization header."),
-            @ApiResponse(responseCode = "422", description = "Account limit exceeded"),
-            @ApiResponse(responseCode = "400", description = "User not exists.")
+            @ApiResponse(responseCode = "404", description = "User not exists.")
     })
-    @PostMapping("/deposit")
-    public ResponseEntity<DepositResponseRecord> accountDeposit(@RequestBody @Valid DepositRequestRecord depositRequest, HttpServletRequest request){
+    @PutMapping()
+    public ResponseEntity<UserRecord> updateUser(@RequestBody UpdateUserRecord updateUser, HttpServletRequest request){
         String username = this.validationRequest(request);
+        User user = (User) userService.updateUser(username,updateUser);
+        UserRecord userResponse = new UserRecord(user);
 
-        User user = userService.depositAccount(username, depositRequest.value());
-        return ResponseEntity.ok(new DepositResponseRecord(user));
+        return ResponseEntity.ok().body(userResponse);
     }
 
 
 
-    @Operation(summary = "Sake money out the account", description = "Sake an amount into a specific user's account and returns informations of sake and the account")
+    @Operation(summary = "Delete a current user", description = "Delete a current user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operation successful"),
-            @ApiResponse(responseCode = "403", description = "Missing authorization header."),
-            @ApiResponse(responseCode = "422", description = "Not balance in account"),
-            @ApiResponse(responseCode = "400", description = "User not exists.")
+            @ApiResponse(responseCode = "404", description = "User not exists.")
     })
-    @PostMapping("/withdrawal")
-    public ResponseEntity<WithdrawalResponseRecord> accountWithdrawal(@RequestBody @Valid WithdrawalRequestRecord withdrawalRequest, HttpServletRequest request){
+    @DeleteMapping()
+    public ResponseEntity<HashMap<String,String>> deleteUser(HttpServletRequest request){
         String username = this.validationRequest(request);
+        userService.deleteUser(username);
 
-        User user = userService.withdrawalAccount(username, withdrawalRequest.value());
-        return ResponseEntity.ok(new WithdrawalResponseRecord(user, withdrawalRequest));
-    }
+        HashMap<String,String> response= new HashMap<>();
+        response.put("message", "User deleted succsessfully");
 
-
-
-    @Operation(summary = "Transfer money", description = "Transfer money for user especified for username")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Operation successful."),
-            @ApiResponse(responseCode = "403", description = "Missing authorization header."),
-            @ApiResponse(responseCode = "422", description = "Not balance in sender account."),
-            @ApiResponse(responseCode = "422", description = "Not limit in recipient account."),
-            @ApiResponse(responseCode = "400", description = "Sender not exists."),
-            @ApiResponse(responseCode = "400", description = "Recipient not exists.")
-    })
-    @PostMapping("/transfer")
-    public ResponseEntity<TransferResponseRecord> transfer(@RequestBody @Valid TransferRequestRecord transferRequest, HttpServletRequest request){
-        String username = this.validationRequest(request);
-
-        User userSender = userService.transferAccount(username,transferRequest);
-        return ResponseEntity.ok(new TransferResponseRecord(userSender,transferRequest));
+        return ResponseEntity.ok(response);
     }
 
 

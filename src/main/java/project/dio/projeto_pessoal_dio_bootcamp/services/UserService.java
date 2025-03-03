@@ -5,12 +5,11 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.dio.projeto_pessoal_dio_bootcamp.controllers.records.requestRecords.TransferRequestRecord;
-import project.dio.projeto_pessoal_dio_bootcamp.exceptions.businessExceptions.ExceededAccountLimitException;
-import project.dio.projeto_pessoal_dio_bootcamp.exceptions.businessExceptions.NotBalanceException;
-import project.dio.projeto_pessoal_dio_bootcamp.exceptions.businessExceptions.RecipientNotExistsException;
-import project.dio.projeto_pessoal_dio_bootcamp.exceptions.businessExceptions.UserNotExistsException;
+import project.dio.projeto_pessoal_dio_bootcamp.controllers.records.requestRecords.UpdateUserRecord;
+import project.dio.projeto_pessoal_dio_bootcamp.exceptions.businessExceptions.*;
 import project.dio.projeto_pessoal_dio_bootcamp.models.User;
 import project.dio.projeto_pessoal_dio_bootcamp.repositories.UserRepository;
 
@@ -22,6 +21,8 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
 
     public User saveUser(User user){
@@ -90,6 +91,26 @@ public class UserService implements UserDetailsService {
         userRecipient.getAccount().setBalance(recipientBalance.add(transferData.value()));
         userRepository.saveAll(List.of(userSender,userRecipient));
         return userSender;
+    }
+
+
+    @Transactional
+    public User updateUser(String username, UpdateUserRecord updateUser){
+        if(updateUser.username() != null && userRepository.findByUsername(updateUser.username()) != null){
+            throw new UserAlreadyExistsException("Username already exists");
+        }
+        User user = (User) loadUserByUsername(username);
+        user.setUsername(updateUser.username() != null ?updateUser.username() :user.getUsername());
+        user.setName(updateUser.name() != null ?updateUser.name() :user.getName());
+        user.setPassword(updateUser.password() != null ?encoder.encode(updateUser.password()) : user.getPassword());
+        return userRepository.save(user);
+    }
+
+
+    @Transactional
+    public void deleteUser(String username){
+        User user = (User) loadUserByUsername(username);
+        userRepository.delete(user);
     }
 
 
