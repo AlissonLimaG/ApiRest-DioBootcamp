@@ -72,7 +72,8 @@ public class AccountService {
 
         userSender.getAccount().setBalance(senderBalance.subtract(transferData.value()));
         userRecipient.getAccount().setBalance(recipientBalance.add(transferData.value()));
-        userRepository.saveAll(List.of(userSender,userRecipient));
+        userRepository.save(userSender);
+        userRepository.save(userRecipient);
         return userSender;
     }
 
