@@ -1,7 +1,10 @@
 # 📌 Projeto - Sistema Bancário API
 
 ## 📖 Sobre o Projeto
-Este projeto é uma API REST para um sistema bancário promovida pelo Decola Tech 2025, desenvolvida com **Java 17** e **Spring Boot 3**. Ele oferece funcionalidades como autenticação de usuários, operações bancárias e tratamento de erros, seguindo boas práticas de desenvolvimento.
+Este projeto é uma API REST para um sistema bancário promovida pelo Decola Tech 2025, desenvolvida com **Java 17** e **Spring Boot 3**. Ele oferece funcionalidades como autenticação de usuários, operações bancárias e tratamento de erros, seguindo práticas de desenvolvimento que aprendi até agora durante o bootcamp e meus estudos pessoais.
+## 📖 Como testar?
+Você pode testar clonando o repositório e rodar localmente na sua máquina, é necessário ter o JDK 17 e o gradle instalados, ou, acessar a documentação pública da api que estará linkada ao final deste documento.
+### *Ps: Boa parte da api está em inglês, quiz seguir o mesmo padrão que foi passado no desafio de projeto.*
 
 ## Modelo de domínio
 ```mermaid
@@ -112,7 +115,7 @@ Os **testes unitários** foram uma grande prioridade no projeto, soube recenteme
 ## 🔗 Documentação Pública (Swagger)
 A API possui uma documentação interativa no Swagger, acessível pelo seguinte link:
 
-➡️ **[Acessar Documentação da API](#)** __
+➡️ **[Acessar Documentação da API](https://apirest-diobootcamp-production.up.railway.app/swagger-ui/index.html#/)** __
 
 ## 🔗 Como usar?
 
@@ -134,7 +137,8 @@ o login(você vai usar ele para acessar outras rotas).**
 <img src="assets/tutorial5.png">
 
 **_Obs: Para utilizar a rota de transferência você deve ter cadastrado pelo menos dois usuários.
-Se você for tentar fazer login ou registrar um novo usuário, lembre-se de deslogar antes._**
+Se você for tentar fazer login ou registrar um novo usuário, lembre-se de deslogar antes. 
+Se você deletar ou atualizar um usuário, também deve deslogar._**
 
 ---
 ✨ **Desenvolvido com paixão por Alisson Lima :)** ✨
